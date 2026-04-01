@@ -16,15 +16,15 @@ spec:
           title: Audit Name
           default: "Sandbox_Test_01"
 
-  # EVERY step must be indented under 'steps:'
+  # This 'steps:' key MUST be here before the '- id:'
   steps:
     - id: fetch
       action: fetch:template
       input:
         url: ./skeleton
         values:
-          # TEST 2: Simple math to see if the engine is alive
-          leak: "{{ range.constructor('return 1+1')() }}"
+          # TEST: See if the engine calculates 2 or just prints text
+          leak: "{{ 1 + 1 }}"
 
     - id: log-result
       action: debug:log
